@@ -1,0 +1,166 @@
+'stores selected cell's previous value
+Dim OldVal
+
+' triggers when there is any change in any cell of the worksheet
+        Private Sub Worksheet_Change(ByVal Target As Range)
+            Dim xrng As Range
+              Dim CurrentTime
+                   Dim UserName As String
+                   Dim CurrentComment As String
+                   UserName = Application.UserName
+'            when multiple cells are edited at same time ie dragagging of cells
+           If Target.Cells.Count > 1 Then
+            Dim CellNumber As Integer
+            CellNumber = 1
+'            checking for each cell int the changed range
+        For Each Cell In Target
+            Dim NewComment As String
+            Dim StartingPosition As Integer
+            Dim EndingPosition  As Integer
+'            extracting old value from the previous comment
+'            value is stored in between StartingPosition and EndingPosition
+            StartingPosition = -1
+            NewComment = ""
+            EndingPosition = -1
+            If Not Cell.Comment Is Nothing Then
+                    For Counter = 1 To Len(Cell.Comment.text)
+                        If Mid(Cell.Comment.text, Counter, 1) = Chr(39) Then
+                            If EndingPosition = -1 Then
+                            If StartingPosition = -1 Then
+                              StartingPosition = Counter
+                            ElseIf Mid(Cell.Comment.text, Counter, 1) = Chr(39) And Mid(Cell.Comment.text, Counter + 1, 1) = Chr(32) And Mid(Cell.Comment.text, Counter + 2, 1) = Chr(32) And Mid(Cell.Comment.text, Counter + 3, 1) = Chr(102) Then
+                            EndingPosition = Counter
+                            End If
+                            End If
+                        End If
+                    Next
+'                    extracting the previous cell value
+                   For CellId = StartingPosition + 1 To EndingPosition - 1
+                    NewComment = NewComment & CStr(Mid(Cell.Comment.text, CellId, 1))
+                   Next
+          End If
+'          inserting blank if previous cell was null
+            If Len(NewComment) = 0 Then
+            NewComment = "blank"
+            End If
+
+               CurrentTime = Now
+               Dim CurrentValue As String
+               CurrentValue = Cell.Value
+               If CurrentValue = "" Then
+               CurrentValue = "blank"
+               End If
+'               formmating new comment in correct format
+                CurrentComment = UserName & ", " & CurrentTime & " Changed cell " & Cell.Address(0, 0) & " to " & "'" & CurrentValue & "'" & "  from " & "'" & NewComment & "'" & "."
+                 If Cell.Value = "" And NewComment = "blank" Then
+
+                 Else
+                 If Not Cell.Comment Is Nothing Then
+                    CurrentComment = CurrentComment + Chr(10) + Chr(10) + Cell.Comment.text
+                    Cell.Comment.Delete
+                 End If
+'                      adding comment to the cell
+                      Cell.AddComment (CurrentComment)
+                      Cell.Borders.Color = vbGreen
+                      Cell.Interior.Color = vbYellow
+'                      auto fits the new comment height
+                      Call AutoFitTargetComments(ActiveSheet, Cell.Comment)
+                 End If
+            CellNumber = CellNumber + 1
+         Next
+           Exit Sub
+           End If
+'           when a single cell is changed
+            Set xrng = Range(Cells.Address)
+            If Not Application.Intersect(xrng, Range(Target.Address)) _
+                   Is Nothing Then
+
+                   CurrentTime = Now
+
+                   If Len(OldVal) = 0 Then
+                       OldVal = "blank"
+                   End If
+
+                    Dim FinalValue As String
+                    FinalValue = Target.Value
+
+                    If Len(Target.Value) = 0 Then
+                        FinalValue = "blank"
+                    End If
+'                    formatting new comment in correct format
+                   CurrentComment = UserName & ", " & CurrentTime & " Changed cell " & Target.Address(0, 0) & " to " & "'" & FinalValue & "'" & "  from " & "'" & OldVal & "'" & "."
+                  If OldVal = "blank" And FinalValue = "blank" Then
+
+                  Else
+'                  delteing previous comment if cell have
+                    If Not Target.Comment Is Nothing Then
+                    CurrentComment = CurrentComment + Chr(10) + Chr(10) + Target.Comment.text
+                    Target.Comment.Delete
+                    End If
+                      Target.AddComment (CurrentComment)
+                      Target.Borders.Color = vbGreen
+                      Target.Interior.Color = vbYellow
+'                      auto fitting the comment box
+            Call AutoFitTargetComments(ActiveSheet, Target.Comment)
+                  End If
+
+            End If
+        End Sub
+
+   Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+'           goes to worksheet change if multiple cells are selected and previous cellls value is extracted there only
+'           if single cell if selected then the curent value is set in OldVal which will become previous value later on
+            If Target.Cells.Count > 1 Then
+           Exit Sub
+           End If
+            OldVal = Target.Value
+        End Sub
+
+  Private Sub AutoFitTargetComments(ByVal Sh As Object, ByVal ocomment As Object)
+            Call FitToTextTall(ocomment, Sh)
+End Sub
+
+
+Private Function FitToTextTall(ByVal ocomment As Comment, ByVal ParentSheet As Worksheet) As Boolean
+'   creates a textbox with same attributes as of the comment box and gets the required height of the comment box from there and sets it
+    Dim Width As Single, Height As Single
+    Dim oTempTextBox As Shape
+'   no change if the sheet have protected content
+    If ParentSheet.ProtectContents Then _
+        Exit Function
+'      speed up the macro
+    Application.ScreenUpdating = False
+    On Error Resume Next
+        ParentSheet.Shapes("TempTextBox").Delete
+    Err.Clear
+'    copying wight and height of commentbox in some variables
+    With ocomment.Shape
+        Width = .Width
+        Height = .Height
+    End With
+'    setting the width and height of the textbox same as Of the comment box and renammig it
+    Set oTempTextBox = ParentSheet.Shapes.AddTextbox(msoTextOrientationHorizontal, 0, 0, Width, Height)
+    oTempTextBox.Name = "TempTextBox"
+
+    With oTempTextBox.TextFrame2
+'        all attributes of the comment box are copied in textbox
+        .TextRange.text = ocomment.text
+        .TextRange.Font.Size = ocomment.Shape.TextFrame.Characters.Font.Size
+        .TextRange.Font.Name = ocomment.Shape.TextFrame.Characters.Font.Name
+        .MarginRight = 0
+        .MarginLeft = 0
+'        autosets the height of the textbox so that it fits all the given text
+        .AutoSize = msoAutoSizeShapeToFitText
+    End With
+'    resizeing the comment box with the attributes of the textbox
+    With ocomment.Shape
+        .Height = oTempTextBox.Height + 10
+        .AlternativeText = ocomment.text & "||" & .Width & "||" & .Height
+    End With
+'   erasing the textbox to free up memory
+    oTempTextBox.Delete
+'    checkinng if there is any error occured and our task is done sucessfully or not
+    If Err.Number = 0 Then _
+        FitToTextTall = True
+
+End Function
