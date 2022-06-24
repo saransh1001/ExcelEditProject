@@ -17,10 +17,8 @@ public class test {
         jsonString.useDelimiter("\\Z");
         String jsonStr= jsonString.next();
         boolean addMacro=true;
-
         ApplicationContext context= new AnnotationConfigApplicationContext(javaConfig.class);
         excelApplicationController excelApplicationController= context.getBean("excelApplicationController", com.project.Excel.controllers.excelApplicationController.class);
-        // now controller is called
         excelApplicationController.runExcelApplicationServices(jsonStr,addMacro);
     }
 }
