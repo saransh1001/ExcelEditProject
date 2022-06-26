@@ -8,6 +8,9 @@ group = 'com.project'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+configurations.all {
+	exclude module: 'slf4j-log4j12'
+}
 repositories {
 	mavenCentral()
 	google()
@@ -40,3 +43,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+

@@ -16,9 +16,4 @@ public class javaConfig {
     public jsonDao jsonDao(){
         return new jsonDao();
     }
-
-    @Bean
-    public excelApplicationController excelApplicationController(){
-        return new excelApplicationController();
-    }
 }

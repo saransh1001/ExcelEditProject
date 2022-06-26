@@ -1,8 +1,5 @@
 package com.project.Excel;
-import com.project.Excel.configurations.javaConfig;
 import com.project.Excel.controllers.excelApplicationController;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -17,8 +14,7 @@ public class test {
         jsonString.useDelimiter("\\Z");
         String jsonStr= jsonString.next();
         boolean addMacro=true;
-        ApplicationContext context= new AnnotationConfigApplicationContext(javaConfig.class);
-        excelApplicationController excelApplicationController= context.getBean("excelApplicationController", com.project.Excel.controllers.excelApplicationController.class);
+        excelApplicationController excelApplicationController= new excelApplicationController();
         excelApplicationController.runExcelApplicationServices(jsonStr,addMacro);
     }
 }
