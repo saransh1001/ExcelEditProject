@@ -2,18 +2,11 @@ package com.project.Excel.services;
 import com.aspose.cells.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.project.Excel.configurations.javaConfig;
 import com.project.Excel.dao.jsonDao;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
-
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -162,8 +155,6 @@ public class excelServiceImplementation implements excelService {
         if (file != null && !file.exists()) {
             throw new RuntimeException("Error: File " + file + " not found!");
         }
-
-
         Scanner macroCode = new Scanner(file);
         macroCode.useDelimiter("\\Z");
         return macroCode.next();

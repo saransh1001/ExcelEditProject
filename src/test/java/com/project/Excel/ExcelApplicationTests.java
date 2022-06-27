@@ -2,24 +2,14 @@ package com.project.Excel;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.project.Excel.configurations.javaConfig;
-import com.project.Excel.controllers.excelApplicationController;
 import com.project.Excel.dao.jsonDao;
-import com.project.Excel.services.excelService;
 import com.project.Excel.services.excelServiceImplementation;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ExcelApplicationTests {
