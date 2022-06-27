@@ -6,8 +6,7 @@ import com.project.Excel.dao.jsonDao;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 @Service
@@ -128,8 +127,34 @@ public class excelServiceImplementation implements excelService {
 
     @Override
     public String getMacroCode() throws FileNotFoundException {
-        String filePath = System.getProperty("user.dir")+"/src/main/java/com/project/Excel/services/macroCode";
-        File file = new File(filePath);
+
+        File file = null;
+        String resource = "/com/project/Excel/services/macroCode";
+        java.net.URL res = getClass().getResource(resource);
+        if (res.getProtocol().equals("jar")) {
+            try {
+                InputStream input = getClass().getResourceAsStream(resource);
+                file = File.createTempFile("tempfile", ".tmp");
+                OutputStream out = new FileOutputStream(file);
+                int read;
+                byte[] bytes = new byte[1024];
+
+                while ((read = input.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
+                }
+                out.close();
+                file.deleteOnExit();
+            } catch (IOException ex) {
+                //  Exceptions.printStackTrace(ex);
+            }
+        } else {
+            //this will probably work in your IDE, but not from a JAR
+            file = new File(res.getFile());
+        }
+
+        if (file != null && !file.exists()) {
+            throw new RuntimeException("Error: File " + file + " not found!");
+        }
         Scanner macroCode = new Scanner(file);
         macroCode.useDelimiter("\\Z");
         return macroCode.next();

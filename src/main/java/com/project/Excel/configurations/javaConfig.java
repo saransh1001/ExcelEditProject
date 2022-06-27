@@ -1,5 +1,4 @@
 package com.project.Excel.configurations;
-import com.project.Excel.controllers.excelApplicationController;
 import com.project.Excel.dao.jsonDao;
 import com.project.Excel.services.excelServiceImplementation;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +14,5 @@ public class javaConfig {
     @Bean
     public jsonDao jsonDao(){
         return new jsonDao();
-    }
-
-    @Bean
-    public excelApplicationController excelApplicationController(){
-        return new excelApplicationController();
     }
 }
