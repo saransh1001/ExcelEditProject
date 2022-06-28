@@ -1,0 +1,8 @@
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+'     goes to worksheet change if multiple cells are selected and previous cellls value is extracted there only
+'    if single cell if selected then the curent value is set in OldVal which will become previous value later on
+    If Target.Cells.Count > 1 Then
+        Exit Sub
+    End If
+    OldVal = CStr(Target.Value)
+End Sub

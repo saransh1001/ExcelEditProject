@@ -1,0 +1,36 @@
+Private Sub AddCommentInCell(ByVal A As Integer, ByVal b As Integer)
+    Dim CurrentTime
+    Dim UserName As String
+    Dim CurrentComment As String
+    UserName = Application.UserName
+    CurrentTime = Now
+
+    If Len(OldVal) = 0 Then
+        OldVal = "blank"
+    End If
+
+    Dim FinalValue  As String
+    FinalValue = CStr(Cells(A, b).Value)
+
+    If Len(Cells(A, b).Value) = 0 Then
+        FinalValue = "blank"
+    End If
+
+'   formatting new comment in correct format
+    CurrentComment = UserName & ", " & CurrentTime & " Changed cell " & Cells(A, b).Address(0, 0) & " to " & "'" & FinalValue & "'" & "  from " & "'" & OldVal & "'" & "."
+    If OldVal = "blank" And FinalValue = "blank" Then
+    Else
+'         deleting previous comment if cell have
+        If Not Cells(A, b).Comment Is Nothing Then
+            CurrentComment = CurrentComment + Chr(10) + Chr(10) + Cells(A, b).Comment.Text
+            Cells(A, b).Comment.Delete
+        End If
+'        now adding cell comment and setting color and boundry color values
+        Cells(A, b).AddComment (CurrentComment)
+'       resizing the comment window
+        Call AutoFitTargetComments(ActiveSheet, Cells(A, b).Comment)
+    End If
+
+    Cells(A, b).Interior.Color=
+    Cells(A, b).Borders.Color=
+End Sub
