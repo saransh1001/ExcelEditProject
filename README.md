@@ -12,3 +12,7 @@ AddMacro-> Boolean True if add Macro else False
 obj.runExcelApplicationServices(JsonString, AddMacro)
 
 The Excel File will be saved at the user's desktop with name excel.xlsm
+
+To give custom color of cell background & cell border(when they are highlighted) just pass two string parameters to runExcelApplicationServices()
+
+obj.runExcelApplicationServices(JsonString,AddMacro,cellColor,cellBorderColor)
