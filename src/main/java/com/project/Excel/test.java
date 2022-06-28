@@ -15,6 +15,6 @@ public class test {
         String jsonStr= jsonString.next();
         boolean addMacro=true;
         excelApplicationController excelApplicationController= new excelApplicationController();
-        excelApplicationController.runExcelApplicationServices(jsonStr,addMacro);
+        excelApplicationController.runExcelApplicationServices(jsonStr,addMacro,"red","yellow");
     }
 }

@@ -31,7 +31,7 @@ public class jsonDao {
 
         }
     }
-    public JsonArray GetJsonArray (String json, ArrayList<String>headings) {
+    public  JsonArray GetJsonArray(String json, ArrayList<String> headings) {
         //parsing the json string to get json array of objects
         try {
             JsonArray jsonArray = new Gson().fromJson(json, JsonArray.class);

@@ -16,9 +16,14 @@ public class excelServiceImplementation implements excelService {
     @Autowired
     private jsonDao jsonDao;
 
+    private String cellColor;
+
+    private String cellBorderColor;
     @Override
-    public void getExcelFromData(String json, boolean addMacro) throws Exception {
+    public void getExcelFromData(String json, boolean addMacro,String cellColor,String cellBorderColor) throws Exception {
         // now we will try to get the json array from the json string via dao layer
+        this.cellColor= cellColor.substring(0,1).toUpperCase()+cellColor.substring(1);
+        this.cellBorderColor=cellBorderColor.substring(0,1).toUpperCase()+cellBorderColor.substring(1);
         ArrayList<String>headings= new ArrayList<>();
         try {
             JsonArray arr = jsonDao.GetJsonArray(json,headings);
@@ -121,15 +126,34 @@ public class excelServiceImplementation implements excelService {
         module.setCodes(MacroCode);
         // Save the workbook
         workbook.save(dataDir + "excel.xlsm", SaveFormat.XLSM);
-        // Excel with with macro is saved with .xlsm extension
+        // Excel with  macro is saved with .xlsm extension
         System.out.println("excel.xlsm written successfully");
     }
 
     @Override
     public String getMacroCode() throws FileNotFoundException {
 
+
+        String macroWorksheetChange = getMacroCodeFromFiles("/com/project/Excel/services/macroWorksheetChange");
+        String macroAddCommentInCell= getMacroCodeFromFiles("/com/project/Excel/services/macroAddCommentInCell");
+        String macroWorksheetSelectionChange= getMacroCodeFromFiles("/com/project/Excel/services/macroWorksheetSelectionChange");
+        String macroAutoSizeCode = getMacroCodeFromFiles("/com/project/Excel/services/macroAutoSizeCode");
+
+        String macroCode=macroWorksheetChange;
+
+        int addCommentLength=macroAddCommentInCell.length();
+        String actualMacroAddCommentInCell=macroAddCommentInCell.substring(0,addCommentLength-39)+"vb"+cellColor+"\n"+macroAddCommentInCell.substring(addCommentLength-38,addCommentLength-8)+"vb"+cellBorderColor+"\n"+"End Sub"+"\n";
+
+        macroCode=macroCode+"\n"+actualMacroAddCommentInCell;
+        macroCode=macroCode+"\n"+macroWorksheetSelectionChange;
+        macroCode=macroCode+"\n"+macroAutoSizeCode;
+
+        return macroCode;
+    }
+    @Override
+    public String getMacroCodeFromFiles(String resource) throws FileNotFoundException {
+
         File file = null;
-        String resource = "/com/project/Excel/services/macroCode";
         java.net.URL res = getClass().getResource(resource);
         if (res.getProtocol().equals("jar")) {
             try {
@@ -145,7 +169,7 @@ public class excelServiceImplementation implements excelService {
                 out.close();
                 file.deleteOnExit();
             } catch (IOException ex) {
-                //  Exceptions.printStackTrace(ex);
+                //Exceptions.printStackTrace(ex);
             }
         } else {
             //this will probably work in your IDE, but not from a JAR
@@ -155,6 +179,7 @@ public class excelServiceImplementation implements excelService {
         if (file != null && !file.exists()) {
             throw new RuntimeException("Error: File " + file + " not found!");
         }
+
         Scanner macroCode = new Scanner(file);
         macroCode.useDelimiter("\\Z");
         return macroCode.next();

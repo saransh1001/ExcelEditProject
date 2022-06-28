@@ -1,0 +1,78 @@
+'stores selected cell's previous value
+Dim OldVal
+Dim StoreComments() As String
+'store the row of the first cell which will be dragged
+Dim store_row As Integer
+'store the row of the first cell which will be dragged
+Dim store_column As Integer
+'no of cells on which operation is to be applied
+Dim no_of_cells_operationapplied As Integer
+
+' triggers when there is any change in any cell of the worksheet
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+    no_of_cells_operationapplied = (Selection.Cells.Count)
+    Dim CurrentComment As String
+
+'    checking if the operation is just simple editing one cell or dragging a cell
+    If Target.Cells.Count = 1 Then
+'        if operation is just on one cell
+
+        If no_of_cells_operationapplied = 1 Then
+            Call AddCommentInCell(Target.Cells.Row, Target.Cells.Column)
+'             mark store_row to -1 to show that we have done single cell operation
+            store_row = -1
+        End If
+
+'        save the value of row and coloumn of the first cell of dragging to apply comment it that later on
+        If no_of_cells_operationapplied > 1 Then
+            store_row = Target.Cells.Row
+            store_column = Target.Cells.Column
+        End If
+
+        Exit Sub
+    End If
+
+'   when multiple cells are edited at same time ie dragagging of cells
+    If Target.Cells.Count > 1 Then
+'       dragging operation Is performed store the previous values as we can't change cell's value in between
+        ReDim StoreComments(Target.Cells.Count + 1)
+        Dim i As Integer
+        i = 1
+        For Each cell In Target
+'            undo the event to see the previous value of the cell
+            With Application
+                On Error GoTo ErrHandler
+                .EnableEvents = False
+                .Undo
+                OldValue = CStr(cell.Value)
+                .Undo
+                .EnableEvents = True
+            End With
+            StoreComments(i) = OldValue
+            i = i + 1
+
+ErrHandler:
+            Application.EnableEvents = True
+            '    prints the error if any occured
+            If Err.Number <> 0 Then
+                MsgBox "Error: " & Err.Number & vbNewLine & Err.Description
+            End If
+        Next
+
+        '    now changing the values of comments of each cell from StoreComments array
+        i = 1
+        For Each cell In Target
+            OldVal = StoreComments(i)
+            Call AddCommentInCell(cell.Row, cell.Column)
+            i = i + 1
+        Next
+
+'         adding comment to the first cell of the dragged cells
+        If store_row <> -1 Then
+            Call AddCommentInCell(store_row, store_column)
+        End If
+
+        Exit Sub
+    End If
+End Sub
