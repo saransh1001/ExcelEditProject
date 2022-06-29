@@ -15,11 +15,11 @@ Private Sub AddCommentInCell(ByVal A As Integer, ByVal b As Integer)
     If Len(Cells(A, b).Value) = 0 Then
         FinalValue = "blank"
     End If
-
+    If OldVal = "blank" And FinalValue = "blank" Then
+    Exit Sub
+    End If
 '   formatting new comment in correct format
     CurrentComment = UserName & ", " & CurrentTime & " Changed cell " & Cells(A, b).Address(0, 0) & " to " & "'" & FinalValue & "'" & "  from " & "'" & OldVal & "'" & "."
-    If OldVal = "blank" And FinalValue = "blank" Then
-    Else
 '         deleting previous comment if cell have
         If Not Cells(A, b).Comment Is Nothing Then
             CurrentComment = CurrentComment + Chr(10) + Chr(10) + Cells(A, b).Comment.Text
@@ -29,8 +29,6 @@ Private Sub AddCommentInCell(ByVal A As Integer, ByVal b As Integer)
         Cells(A, b).AddComment (CurrentComment)
 '       resizing the comment window
         Call AutoFitTargetComments(ActiveSheet, Cells(A, b).Comment)
-    End If
-
     Cells(A, b).Interior.Color=
     Cells(A, b).Borders.Color=
 End Sub
