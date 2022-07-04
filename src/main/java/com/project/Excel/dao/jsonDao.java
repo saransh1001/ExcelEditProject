@@ -5,9 +5,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Component
 public class jsonDao {
 
+    /**
+     * This function extract all the headings or keys from the Json Objects
+     * @param object -> Object from which headings are extracted
+     * @param key -> key represent the heading formed till yet by traversing the json objects
+     * @param finalKeys -> this string holds the key that will be final heading
+     * @param headings -> This array of strings contains the headings of the data
+     */
     public void findAllKeys(Object object, String key, Set<String> finalKeys, ArrayList<String>headings) {
         if (object instanceof JsonObject) {
             JsonObject jsonObject = (JsonObject) object;
@@ -30,6 +38,13 @@ public class jsonDao {
             }
         }
     }
+
+    /**
+     * This function will parse json string to JsonArray and will help to get all the keys of the data
+     * @param json -> This is string which contains json data that has to be added to Excel file
+     * @param headings ->This array of strings will get the headings of the data
+     * @return JsonArray
+     */
     public  JsonArray GetJsonArray(String json, ArrayList<String> headings) {
         //parsing the json string to get json array of objects
         try {
