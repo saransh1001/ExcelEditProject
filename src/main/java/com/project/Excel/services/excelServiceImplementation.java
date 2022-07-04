@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -35,7 +36,6 @@ public class excelServiceImplementation implements excelService {
 
     @Override
     public void writeDataToExcel(ArrayList<String> headings, JsonArray arr, boolean addMacro) throws Exception {
-
         //Creates a blank workbook
         Workbook workbook = new Workbook();
         Worksheet worksheet = workbook.getWorksheets().get(0);
@@ -48,6 +48,7 @@ public class excelServiceImplementation implements excelService {
         for (int i = 0; i < headings.size();i++) {
             Cell cell= cells.get(0,i);
             cell.setValue(headings.get(i));
+
             Style style= cell.getStyle();
             style.getFont().setBold(true);
             style.getFont().setSize(15);
@@ -70,6 +71,7 @@ public class excelServiceImplementation implements excelService {
                     } catch (Exception ignored) {
                     }
                 }
+
                 Cell c= cells.get(rownum,j);
                 String value="";
 
@@ -154,7 +156,7 @@ public class excelServiceImplementation implements excelService {
     public String getMacroCodeFromFiles(String resource) throws FileNotFoundException {
 
         File file = null;
-        java.net.URL res = getClass().getResource(resource);
+        URL res = getClass().getResource(resource);
         if (res.getProtocol().equals("jar")) {
             try {
                 InputStream input = getClass().getResourceAsStream(resource);
@@ -162,7 +164,6 @@ public class excelServiceImplementation implements excelService {
                 OutputStream out = new FileOutputStream(file);
                 int read;
                 byte[] bytes = new byte[1024];
-
                 while ((read = input.read(bytes)) != -1) {
                     out.write(bytes, 0, read);
                 }
