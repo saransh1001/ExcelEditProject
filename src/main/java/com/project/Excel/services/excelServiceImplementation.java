@@ -13,13 +13,21 @@ import java.util.*;
 @Service
 public class excelServiceImplementation implements excelService {
 
-
     @Autowired
     private jsonDao jsonDao;
 
     private String cellColor;
 
     private String cellBorderColor;
+
+    /**
+     * This function first calls the jsonDao to get the JsonArray and the keys of the data from the json string and then passes these to writeDataToExcel.
+     * @param json -> This is string which contains json data that has to be added to Excel file
+     * @param addMacro -> This boolean is true if we want to add edit cell highlighted history(macros in excel) else addMacro is false
+     * @param cellColor-> This is the cell color of edited cell
+     * @param cellBorderColor -> This is the cell border color of edited cell
+     * @throws Exception
+     */
     @Override
     public void getExcelFromData(String json, boolean addMacro,String cellColor,String cellBorderColor) throws Exception {
         // now we will try to get the json array from the json string via dao layer
@@ -33,6 +41,14 @@ public class excelServiceImplementation implements excelService {
             System.out.println(e);
         }
     }
+
+    /**
+     * In this function data is filled to the Excel file and if addMacro is true then it will call addMacroToExcel else this function will save file in .xlsx format.
+     * @param headings -> This array of strings contains the headings of the data
+     * @param arr -> This is the JsonArray which contains the JsonObjects out of which data has to be inserted in Excel
+     * @param addMacro -> This boolean is true if we want to add edit cell highlighted history(macros in excel) else addMacro is false
+     * @throws Exception
+     */
 
     @Override
     public void writeDataToExcel(ArrayList<String> headings, JsonArray arr, boolean addMacro) throws Exception {
@@ -120,6 +136,14 @@ public class excelServiceImplementation implements excelService {
         }
     }
 
+    /**
+     * This function will create the VBA module in the Excel file and add the Macro Code in the Module.
+     * @param workbook -> Workbook object in which data has already been added, and now we have to add macros
+     * @param module -> VBA module in the worksheet what will contain the macro code
+     * @param idx -> index of worksheet in which macro code is added
+     * @param dataDir -> User's desktop path at which excel file will be saved
+     * @throws Exception
+     */
     @Override
     public void addMacroToExcel(Workbook workbook,VbaModule module, int idx, String dataDir) throws Exception {
         //Name of the module in which macro is inserted is Edit History
@@ -131,6 +155,12 @@ public class excelServiceImplementation implements excelService {
         // Excel with  macro is saved with .xlsm extension
         System.out.println("excel.xlsm written successfully");
     }
+
+    /**
+     * This function will return the Macro code, first by  getting the macro code by calling the getMacroCodeFromFiles for different parts of the macro code and then assemble them and add cell color & cell border color at specific position.
+     * @return String
+     * @throws FileNotFoundException
+     */
 
     @Override
     public String getMacroCode() throws FileNotFoundException {
@@ -152,8 +182,17 @@ public class excelServiceImplementation implements excelService {
 
         return macroCode;
     }
+
+    /**
+     * This function returns the Macro code of different components of the main macro code
+     * @param resource -> this is the url from which macro code has to be read and to be returned
+     * @return String
+     * @throws FileNotFoundException
+     */
+
     @Override
     public String getMacroCodeFromFiles(String resource) throws FileNotFoundException {
+
 
         File file = null;
         URL res = getClass().getResource(resource);
