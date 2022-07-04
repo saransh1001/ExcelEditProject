@@ -28,7 +28,6 @@ public class jsonDao {
                 headings.add(key);
                 finalKeys.add(key);
             }
-
         }
     }
     public  JsonArray GetJsonArray(String json, ArrayList<String> headings) {

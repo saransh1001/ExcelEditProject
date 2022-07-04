@@ -8,7 +8,6 @@ Private Sub AddCommentInCell(ByVal A As Integer, ByVal b As Integer)
     If Len(OldVal) = 0 Then
         OldVal = "blank"
     End If
-
     Dim FinalValue  As String
     FinalValue = CStr(Cells(A, b).Value)
 

@@ -1,10 +1,13 @@
 package com.project.Excel;
 import com.project.Excel.controllers.excelApplicationController;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 //this class is used for testing of application
+@SpringBootApplication
 public class test {
     public static void main(String[] args) throws FileNotFoundException {
 
@@ -15,6 +18,6 @@ public class test {
         String jsonStr= jsonString.next();
         boolean addMacro=true;
         excelApplicationController excelApplicationController= new excelApplicationController();
-        excelApplicationController.runExcelApplicationServices(jsonStr,addMacro,"blue","yellow");
+        excelApplicationController.runExcelApplicationServices(jsonStr,addMacro,"yellow","green");
     }
 }
