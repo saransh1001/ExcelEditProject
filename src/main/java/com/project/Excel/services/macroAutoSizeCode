@@ -3,18 +3,14 @@ Private Sub AutoFitTargetComments(ByVal Sh As Object, ByVal ocomment As Object)
 End Sub
 
 
-Private Function FitToTextTall(ByVal ocomment As Comment, ByVal ParentSheet As Worksheet) As Boolean
+Private Function FitToTextTall(ByVal ocomment As Comment, ByVal ParentSheet As Worksheet)
 '   creates a textbox with same attributes as of the comment box and gets the required height of the comment box from there and sets it
     Dim Width As Single, Height As Single
     Dim oTempTextBox As Shape
-'   no change if the sheet have protected content
-    If ParentSheet.ProtectContents Then _
-        Exit Function
 '      speed up the macro
     Application.ScreenUpdating = False
     On Error Resume Next
-        ParentSheet.Shapes("TempTextBox").Delete
-    Err.Clear
+    ParentSheet.Shapes("TempTextBox").Delete
 '    copying wight and height of commentbox in some variables
     With ocomment.Shape
         Width = .Width
@@ -36,13 +32,11 @@ Private Function FitToTextTall(ByVal ocomment As Comment, ByVal ParentSheet As W
     End With
 '    resizeing the comment box with the attributes of the textbox
     With ocomment.Shape
-        .Height = oTempTextBox.Height + 10
-        .AlternativeText = ocomment.Text & "||" & .Width & "||" & .Height
+        .Height = oTempTextBox.Height
+        .AlternativeText = ocomment.Text
     End With
 '   erasing the textbox to free up memory
     oTempTextBox.Delete
 '    checkinng if there is any error occured and our task is done sucessfully or not
-    If Err.Number = 0 Then _
-        FitToTextTall = True
 
 End Function

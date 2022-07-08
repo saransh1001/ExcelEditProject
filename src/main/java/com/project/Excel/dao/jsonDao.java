@@ -1,12 +1,10 @@
 package com.project.Excel.dao;
 import com.google.gson.*;
-import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 
-@Component
 public class jsonDao {
 
     /**

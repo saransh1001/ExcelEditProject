@@ -37,7 +37,7 @@ public interface excelService {
     public void addMacroToExcel(Workbook workbook, VbaModule module, int idx, String dataDir) throws Exception;
 
     /**
-     * This function will return the Macro code, first by  getting the macro code by calling the getMacroCodeFromFiles for different parts of the macro code and then assemble them and add cell color & cell border color at specific position.
+     * This function will return the Macro code, first by  getting the macro code by calling the getMacroCodeFromFiles for different parts of the macro code and then assemble them and add cell color and cell border color at specific position.
      * @return String
      * @throws FileNotFoundException
      */

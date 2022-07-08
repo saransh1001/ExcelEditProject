@@ -1,7 +1,6 @@
 package com.project.Excel;
 import com.project.Excel.controllers.excelApplicationController;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -9,6 +8,7 @@ import java.util.Scanner;
 //this class is used for testing of application
 @SpringBootApplication
 public class test {
+
     public static void main(String[] args) throws FileNotFoundException {
 
         String filePath = System.getProperty("user.dir")+"/src/main/java/com/project/Excel/jsonString";

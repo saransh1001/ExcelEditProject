@@ -9,29 +9,24 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertEquals;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ExcelApplicationTests {
-
 	@Mock
 	private static excelServiceImplementation srt=Mockito.mock(excelServiceImplementation.class, Mockito.CALLS_REAL_METHODS);
 	//	@InjectMocks
 	@Mock
 	private static jsonDao qrt=Mockito.mock(jsonDao.class, Mockito.CALLS_REAL_METHODS);
-
-	//To run this test change getExcelFromData function from void to integer and get jsonDao from bean instead of autowiring in excelService & excelServiceImplementation
-
-//	@Test
-//	public void testdiffrentmacro() throws Exception {
-//		String json="[{\"Id\":\"tp01\",\"Name\":\"Saransh\",\"Department\":\"Backend\"},{\"Id\":\"tp02\",\"Name\":\"Rohit\",\"Department\":\"Backend\"}]";
-//		String json1="23";
-//		boolean addMacro=true;
-//		when(srt.getMacroCode()).thenReturn(json1);
-//		when(srt.getExcelFromData(json,addMacro)).thenCallRealMethod();
-//		assertEquals(json1,srt.getMacroCode());
-//	}
-
+	//  @Test
+//    public void testdiffrentmacro() throws Exception {
+//        String json="[{\"Id\":\"tp01\",\"Name\":\"Saransh\",\"Department\":\"Backend\"},{\"Id\":\"tp02\",\"Name\":\"Rohit\",\"Department\":\"Backend\"}]";
+//        String json1="23";
+//        boolean addMacro=true;
+//        when(srt.getMacroCode()).thenReturn(json1);
+//        when(srt.getExcelFromData(json,addMacro,"yellow","green")).thenCallRealMethod();
+//        assertEquals(json1,srt.getMacroCode());
+//    }
 	@Test
 	public void testdiffrentjsonarray() throws Exception {
 		String json="[{\"Id\":\"tp01\",\"Name\":\"Saransh\",\"Department\":\"Backend\"},{\"Id\":\"tp02\",\"Name\":\"Rohit\",\"Department\":\"Backend\"}]";

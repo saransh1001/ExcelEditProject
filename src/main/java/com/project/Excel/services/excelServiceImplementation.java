@@ -76,6 +76,7 @@ public class excelServiceImplementation implements excelService {
         int rownum = 1;
         for(int i=0;i<arr.size();i++){
             for(int j=0;j<headings.size();j++){
+
                 JsonObject ob = (JsonObject) arr.get(i);
                 String headingString = headings.get(j);
                 String separator = "[.]";
@@ -157,7 +158,7 @@ public class excelServiceImplementation implements excelService {
     }
 
     /**
-     * This function will return the Macro code, first by  getting the macro code by calling the getMacroCodeFromFiles for different parts of the macro code and then assemble them and add cell color & cell border color at specific position.
+     * This function will return the Macro code, first by  getting the macro code by calling the getMacroCodeFromFiles for different parts of the macro code and then assemble them and add cell color and cell border color at specific position.
      * @return String
      * @throws FileNotFoundException
      */
